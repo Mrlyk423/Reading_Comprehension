@@ -60,8 +60,8 @@ def normalize(w):
     
 def tokenize(string):
     # tokenize and lower case
-    string = normalize(string)
-    str_list = [tok.strip() for tok in string.split(' ') if tok != '']
+    string = normalize(string.strip())
+    str_list = [tok.strip() for tok in string.split(' ') if tok.strip() is not '']
     return str_list
     #return ' '.join([str(w) for w in nlp(string)])
 

@@ -39,7 +39,7 @@ def load_data(filename):
         for paragraph in doc["paragraphs"]:
             #print paragraph['context']
             for qas in paragraph['qas']:
-                qas_dict= {"D":paragraph['context'],"A":qas["answers"],"Q":qas["question"]}
+                qas_dict= {"D":paragraph['context'],"A":qas["answers"],"Q":(qas["question"], qas["id"]), }
                 res.append(qas_dict)
     return res
 
@@ -105,7 +105,7 @@ def prepare_data(data, train = True):
     # data is a list containing multiple triples {D,A,Q}
     # A is answers list containing several pairs like {"answer_start": "...", "text": "..."}
     #
-    # return: {'D':'...', 'Q':'...', 'A':[...]}
+    # return: {'D':'...', 'Q':('...', id), 'A':[...]}
     # text normalized and lower cased, A contain offset-answer pairs
     normed_data = []
     count = -1
@@ -115,11 +115,11 @@ def prepare_data(data, train = True):
         count += 1
         if len(triple['A'])>0:
             doc = tokenize(triple['D'])
-            q = tokenize(triple['Q'])
+            q = tokenize(triple['Q'][0])
             text = [tokenize(ex['text']) for ex in triple['A']]
             answer = find_answer(doc, text)
             if answer:
-                normed_data.append({'D':doc, 'Q':q, 'A':[(answer[0],answer[1]),answer[2]]})
+                normed_data.append({'D':doc, 'Q':(q, triple['Q'][1]), 'A':[(answer[0],answer[1]),answer[2]]})
             else:
                 not_found_ids.append(count)
     print("answers cannont be found in %d/%d examples" %(len(not_found_ids), len(data))) 

@@ -9,7 +9,7 @@ default is for dev data. Use `--train True` to process train data.
 Processed data stored in `pro_data` file in following form:
 ```
 {'D':['super', ...], # tokenized document
- 'Q':['which', ...], # tokenized question
+ 'Q':(['which', ...], '56be4...'), # tokenized question and question id for validation
  'A':[(33, 34), 'denver ...'] # answer offset and answer texts
 }
 ```
